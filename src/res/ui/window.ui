@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib='gtk' version='4.0'/>
+  <template class='JoggApplicationWindow' parent='GtkApplicationWindow'>
+    <property name='focus-widget'>search_entry</property>
+    <property name='resizable'>false</property>
+    <style>
+      <class name='jogg'/>
+    </style>
+    <child>
+      <object class='GtkRevealer' id='revealer'>
+        <property name='transition-duration'>300</property>
+        <property name='transition-type'>slide-left</property>
+        <child>
+          <object class='GtkBox' id='revealer_box'>
+            <property name='orientation'>vertical</property>
+            <child>
+              <object class='GtkSearchEntry' id='search_entry'>
+                <property name='placeholder-text'>Find applications or run command</property>
+                <property name='width-chars'>40</property>
+                <style>
+                  <class name='jogg'/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class='GtkRevealer' id='results_revealer'>
+                <property name='transition-duration'>300</property>
+                <property name='transition-type'>slide-down</property>
+                <child>
+                  <object class='GtkScrolledWindow' id='results_scrolled_window'>
+                    <property name='focusable'>false</property>
+                    <property name='has-frame'>true</property>
+                    <property name='max-content-height'>300</property>
+                    <property name='propagate-natural-height'>true</property>
+                      <child>
+                        <object class='GtkListView' id='results'>
+                          <property name='factory'>
+                            <object class='GtkBuilderListItemFactory'>
+                              <property name='resource'>/baltic/engineering/jogg/ui/result.ui</property>
+                            </object>
+                          </property>
+                          <property name='focusable'>false</property>
+                          <property name='model'>
+                            <object class='GtkSingleSelection' id='model'>
+                              <property name='model'>
+                                <object class="GtkFilterListModel" id='filter_model'>
+                                  <property name='model'>
+                                    <object class='GListStore' id='applications'>
+                                      <property name='item-type'>JoggResult</property>
+                                    </object>
+                                  </property>
+                                  <property name='filter'>
+                                    <object class='GtkCustomFilter' id='filter'/>
+                                  </property>
+                                </object>
+                              </property>
+                            </object>
+                          </property>
+                          <property name='show-separators'>true</property>
+                          <property name='single-click-activate'>true</property>
+                        </object>
+                      </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

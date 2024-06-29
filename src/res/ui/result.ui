@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib='gtk' version='4.0'/>
+  <template class='GtkListItem'>
+    <property name='child'>
+      <object class='GtkBox'>
+        <property name='margin-bottom'>6</property>
+        <property name='margin-end'>6</property>
+        <property name='margin-start'>6</property>
+        <property name='margin-top'>6</property>
+        <property name='orientation'>horizontal</property>
+        <property name='spacing'>12</property>
+        <child>
+          <object class='GtkImage'>
+            <binding name='gicon'>
+              <lookup name='icon' type='JoggResult'>
+                <lookup name='item'>GtkListItem</lookup>
+              </lookup>
+            </binding>
+            <property name='icon-size'>large</property>
+          </object>
+        </child>
+        <child>
+          <object class='GtkLabel'>
+            <binding name='label'>
+              <lookup name='label' type='JoggResult'>
+                <lookup name='item'>GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name='focusable'>false</property>
+  </template>
+</interface>

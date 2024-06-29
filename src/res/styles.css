@@ -1,0 +1,12 @@
+window.jogg {
+    background-color: transparent;
+}
+
+entry.search.jogg {
+    min-height: 3em;
+}
+
+frame.jogg {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
