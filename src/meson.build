@@ -25,5 +25,5 @@ executable('jogg',
     gtk4_layer_shell.get_variable('gtk_layer_shell'),
     gtk4,
   ],
-  install : true,
+  install: true,
 )
