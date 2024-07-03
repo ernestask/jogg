@@ -16,7 +16,7 @@ glib = dependency('glib-2.0',
 gtk4 = dependency('gtk4',
   version: '>= 4.14.0',
 )
-gtk4_layer_shell = dependency('gtk4-layer-shell',
+gtk4_layer_shell = dependency('gtk4-layer-shell-0',
   version: '>= 1.0.0',
 )
 
