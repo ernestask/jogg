@@ -10,8 +10,12 @@ project('jogg', 'c',
 )
 
 gio_unix = dependency('gio-unix-2.0')
-glib = dependency('glib-2.0')
-gtk4 = dependency('gtk4')
+glib = dependency('glib-2.0',
+  version: '>= 2.44'
+)
+gtk4 = dependency('gtk4',
+  version: '>= 4.14.0',
+)
 gtk4_layer_shell = dependency('gtk4-layer-shell',
   version: '>= 1.0.0',
 )
