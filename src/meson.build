@@ -22,7 +22,7 @@ executable('jogg',
   dependencies: [
     gio_unix,
     glib,
-    gtk4_layer_shell.get_variable('gtk_layer_shell'),
+    gtk4_layer_shell,
     gtk4,
   ],
   install: true,

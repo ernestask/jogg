@@ -2,3 +2,6 @@
 url = https://github.com/wmww/gtk4-layer-shell.git
 revision = v1.0.2
 depth = 1
+
+[provide]
+gtk4-layer-shell = gtk_layer_shell
