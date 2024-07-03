@@ -1,0 +1,24 @@
+pkgname=gtk4-layer-shell
+pkgver=1.0.2
+pkgrel=1
+pkgdesc="Library to create desktop components for Wayland using the Layer Shell protocol and GTK4"
+arch=('i686' 'x86_64')
+url="https://github.com/wmww/gtk4-layer-shell"
+license=('MIT')
+depends=('gtk4' 'wayland' 'wayland-protocols')
+makedepends=('meson' 'vala')
+source=("git+https://github.com/wmww/gtk4-layer-shell.git#tag=v1.0.2")
+b2sums=('SKIP')
+
+build() {
+    local meson_options=(
+        -Dsmoke-tests=false
+    )
+
+    arch-meson "${meson_options[@]}" gtk4-layer-shell _build
+    meson compile -C _build
+}
+
+package() {
+    meson install -C _build --destdir "$pkgdir"
+}

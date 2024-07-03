@@ -1,0 +1,20 @@
+pkgname=jogg
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Application launcher for wlroot-based Wayland compositors"
+arch=('i686' 'x86_64')
+url="https://github.com/ernestask/jogg"
+license=('GPL-2.0-only')
+depends=('glib2' 'gtk4' 'gtk4-layer-shell')
+makedepends=('glib2-devel' 'meson')
+source=("git+https://github.com/ernestask/jogg.git")
+b2sums=('SKIP')
+
+build() {
+    arch-meson jogg _build
+    meson compile -C _build
+}
+
+package() {
+    meson install -C _build --destdir "$pkgdir"
+}
