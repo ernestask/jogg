@@ -1,5 +1,6 @@
 project('jogg', 'c',
   license: 'GPL-2.0-only',
+  meson_version: '>= 0.55.0',
   version: '1.0',
 )
 
