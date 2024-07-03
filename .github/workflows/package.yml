@@ -1,0 +1,29 @@
+name: package
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container:
+      image: archlinux:base-devel
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm --noprogressbar \
+              git \
+              glib2-devel \
+              gobject-introspection \
+              gtk4 \
+              meson \
+              vala \
+              wayland-protocols
+      - run: |
+          chown nobody: pkg
+          cd pkg
+          runuser -unobody -- makepkg -p PKGBUILD.gtk4-layer-shell -C
+          pacman -U --noconfirm --noprogressbar gtk4-layer-shell-*-x86_64.pkg.tar.zst
+          runuser -unobody -- makepkg -C
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: pkg/*.pkg.tar.zst
