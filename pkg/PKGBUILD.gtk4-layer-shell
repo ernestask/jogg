@@ -6,7 +6,7 @@ arch=('i686' 'x86_64')
 url="https://github.com/wmww/gtk4-layer-shell"
 license=('MIT')
 depends=('gtk4' 'wayland' 'wayland-protocols')
-makedepends=('meson' 'vala')
+makedepends=('git' 'gobject-introspection' 'meson' 'vala')
 source=("git+https://github.com/wmww/gtk4-layer-shell.git#tag=v1.0.2")
 b2sums=('SKIP')
 
