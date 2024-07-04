@@ -1,7 +1,7 @@
 name: package
 on: [push]
 jobs:
-  build:
+  arch:
     runs-on: ubuntu-24.04
     container:
       image: archlinux:base-devel
