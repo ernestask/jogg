@@ -1,6 +1,7 @@
 name: package
 on:
   workflow_call:
+  workflow_dispatch:
 jobs:
   arch:
     runs-on: ubuntu-24.04
