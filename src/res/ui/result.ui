@@ -13,9 +13,9 @@
         <child>
           <object class='GtkImage'>
             <binding name='gicon'>
-              <lookup name='icon' type='JoggResult'>
+              <closure type='GIcon' function='jogg_result_get_icon'>
                 <lookup name='item'>GtkListItem</lookup>
-              </lookup>
+              </closure>
             </binding>
             <property name='icon-size'>large</property>
           </object>
