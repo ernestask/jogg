@@ -71,8 +71,8 @@ jogg_result_get_icon ( GObject    *object
 }
 
 gboolean
-jogg_result_is_action_visible (GObject    *object,
-                               JoggResult *self)
+jogg_result_is_action_visible ( GObject    *object
+                              , JoggResult *self)
 {
     JoggMatchType match_type;
 
