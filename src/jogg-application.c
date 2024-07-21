@@ -170,9 +170,12 @@ match_found:
         haystacks = g_desktop_app_info_list_actions (app_info);
         for (; haystacks != NULL && *haystacks != NULL; haystacks++)
         {
-            haystack = g_desktop_app_info_get_action_name (app_info, *haystacks);
+            g_autofree char *action_name = NULL;
 
-            if (jogg_has_substring (haystack, query, &prefix))
+            haystack = *haystacks;
+            action_name = g_desktop_app_info_get_action_name (app_info, haystack);
+
+            if (jogg_has_substring (action_name, query, &prefix))
             {
                 result = jogg_result_new ( app_info
                                          , haystack

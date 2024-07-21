@@ -53,9 +53,9 @@
                 <child>
                   <object class='GtkLabel'>
                     <binding name='label'>
-                      <lookup name='action' type='JoggResult'>
+                      <closure type='gchararray' function='jogg_result_get_action_name'>
                         <lookup name='item'>GtkListItem</lookup>
-                      </lookup>
+                      </closure>
                     </binding>
                   </object>
                 </child>
