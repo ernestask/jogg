@@ -22,7 +22,6 @@ enum { PROP_APP_INFO = 1
      , PROP_MATCH_TYPE
      , PROP_PREFIX_MATCH
      , PROP_HIDDEN
-     , PROP_ICON
      , PROP_LABEL
      , N_PROPERTIES
      };
@@ -30,6 +29,30 @@ enum { PROP_APP_INFO = 1
 static GParamSpec *properties[N_PROPERTIES];
 
 G_DEFINE_TYPE (JoggResult, jogg_result, G_TYPE_OBJECT);
+
+GIcon *
+jogg_result_get_icon ( GObject    *object
+                     , JoggResult *self)
+{
+    GIcon *icon = NULL;
+
+    if (NULL == self)
+    {
+        return NULL;
+    }
+
+    icon = g_app_info_get_icon (G_APP_INFO (self->app_info));
+    if (NULL == icon)
+    {
+        icon = g_icon_new_for_string ("application-x-executable", NULL);
+    }
+    else
+    {
+        icon = g_object_ref (icon);
+    }
+
+    return icon;
+}
 
 gboolean
 jogg_result_is_action_visible (GObject    *object,
@@ -71,7 +94,6 @@ jogg_result_get_property ( GObject    *object
 {
     JoggResult *self = NULL;
     gboolean nodisplay = false;
-    GIcon *icon = NULL;
     const char *name = NULL;
 
     self = JOGG_RESULT (object);
@@ -94,15 +116,6 @@ jogg_result_get_property ( GObject    *object
         nodisplay = g_desktop_app_info_get_nodisplay (self->app_info);
 
         g_value_set_boolean (value, nodisplay);
-        break;
-    case PROP_ICON:
-        icon = g_app_info_get_icon (G_APP_INFO (self->app_info));
-        if (NULL == icon)
-        {
-            icon = g_icon_new_for_string ("application-x-executable", NULL);
-        }
-
-        g_value_set_object (value, icon);
         break;
     case PROP_LABEL:
         name = g_app_info_get_name (G_APP_INFO (self->app_info));
@@ -197,14 +210,6 @@ jogg_result_class_init (JoggResultClass *klass)
                                                      | G_PARAM_STATIC_STRINGS
                                                      )
                                                    );
-    properties[PROP_ICON] = g_param_spec_object ( "icon"
-                                                , NULL
-                                                , NULL
-                                                , G_TYPE_ICON
-                                                , ( G_PARAM_READABLE
-                                                  | G_PARAM_STATIC_STRINGS
-                                                  )
-                                                );
     properties[PROP_LABEL] = g_param_spec_string ( "label"
                                                  , NULL
                                                  , NULL
