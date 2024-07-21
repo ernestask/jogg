@@ -50,6 +50,10 @@ jogg_result_get_property ( GObject    *object
         break;
     case PROP_ICON:
         icon = g_app_info_get_icon (G_APP_INFO (self->app_info));
+        if (NULL == icon)
+        {
+            icon = g_icon_new_for_string ("application-x-executable", NULL);
+        }
 
         g_value_set_object (value, icon);
         break;
