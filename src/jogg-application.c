@@ -6,12 +6,17 @@
 
 #include "jogg-application.h"
 #include "jogg-application-window.h"
+#include "jogg-result.h"
+#include "jogg-utils.h"
 
+#include <gio/gdesktopappinfo.h>
 #include <gtk4-layer-shell.h>
 
 struct _JoggApplication
 {
     GtkApplication parent_instance;
+
+    GList *applications;
 };
 
 G_DEFINE_TYPE (JoggApplication, jogg_application, GTK_TYPE_APPLICATION);
@@ -19,6 +24,7 @@ G_DEFINE_TYPE (JoggApplication, jogg_application, GTK_TYPE_APPLICATION);
 static void
 jogg_application_init (JoggApplication *self)
 {
+    self->applications = g_app_info_get_all ();
 }
 
 static void
@@ -39,6 +45,16 @@ jogg_application_window_on_realize (GtkWidget *self,
     gtk_layer_set_margin (GTK_WINDOW (self),
                           GTK_LAYER_SHELL_EDGE_TOP,
                           geometry.height / 3);
+}
+
+static void
+jogg_application_finalize (GObject *object)
+{
+    JoggApplication *self = NULL;
+
+    self = JOGG_APPLICATION (object);
+
+    g_list_free_full (g_steal_pointer (&self->applications), g_object_unref);
 }
 
 static void
@@ -76,9 +92,100 @@ jogg_application_activate (GApplication *app)
 static void
 jogg_application_class_init (JoggApplicationClass *klass)
 {
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
 
+    object_class->finalize = jogg_application_finalize;
     app_class->activate = jogg_application_activate;
+}
+
+GPtrArray *
+jogg_application_app_info_search ( JoggApplication *self
+                                 , const char      *query)
+{
+    GPtrArray *results = NULL;
+
+    g_return_val_if_fail (JOGG_IS_APPLICATION (self), NULL);
+    g_return_val_if_fail (query != NULL, NULL);
+
+    results = g_ptr_array_new_full (64, g_object_unref);
+
+    if (*query == '\0')
+    {
+        return results;
+    }
+
+    for (GList *l = self->applications; l != NULL; l = g_list_next (l))
+    {
+        GDesktopAppInfo *app_info = NULL;
+        const char *haystack = NULL;
+        bool prefix = false;
+        const char *const *haystacks = NULL;
+        JoggMatchType match_type = JOGG_MATCH_TYPE_INVALID;
+        JoggResult *result = NULL;
+
+        app_info = G_DESKTOP_APP_INFO (l->data);
+        haystack = g_app_info_get_name (G_APP_INFO (app_info));
+        if (jogg_has_substring (haystack, query, &prefix))
+        {
+            match_type = JOGG_MATCH_TYPE_NAME;
+
+            goto match_found;
+        }
+        haystack = g_app_info_get_display_name (G_APP_INFO (app_info));
+        if (jogg_has_substring (haystack, query, &prefix))
+        {
+            match_type = JOGG_MATCH_TYPE_GENERIC_NAME;
+
+            goto match_found;
+        }
+        haystacks = g_desktop_app_info_get_keywords (app_info);
+        for (; haystacks != NULL && *haystacks != NULL; haystacks++)
+        {
+            haystack = *haystacks;
+
+            if (jogg_has_substring (haystack, query, &prefix))
+            {
+                match_type = JOGG_MATCH_TYPE_KEYWORDS;
+
+                goto match_found;
+            }
+        }
+        haystack = g_app_info_get_executable (G_APP_INFO (app_info));
+        if (jogg_has_substring (haystack, query, &prefix))
+        {
+            match_type = JOGG_MATCH_TYPE_EXEC;
+        }
+
+match_found:
+        if (match_type != JOGG_MATCH_TYPE_INVALID)
+        {
+            result = jogg_result_new (app_info, NULL, match_type, prefix);
+
+            g_ptr_array_add (results, result);
+
+            continue;
+        }
+
+        haystacks = g_desktop_app_info_list_actions (app_info);
+        for (; haystacks != NULL && *haystacks != NULL; haystacks++)
+        {
+            haystack = g_desktop_app_info_get_action_name (app_info, *haystacks);
+
+            if (jogg_has_substring (haystack, query, &prefix))
+            {
+                result = jogg_result_new ( app_info
+                                         , haystack
+                                         , JOGG_MATCH_TYPE_ACTIONS
+                                         , prefix
+                                         );
+
+                g_ptr_array_add (results, result);
+            }
+        }
+    }
+
+    return results;
 }
 
 JoggApplication *

@@ -1,0 +1,26 @@
+/*** BEGIN file-header ***/
+/*
+ * SPDX-License-Identifier: GPL-2.0-only
+ *
+ * Copyright (C) 2024 Ernestas Kulik <ernestas AT baltic DOT engineering>
+ */
+
+#include "jogg-enum-types.h"
+/*** END file-header ***/
+
+/*** BEGIN file-production ***/
+
+/* Enumerations from "@basename@" */
+#include "@basename@"
+/*** END file-production ***/
+
+/*** BEGIN value-header ***/
+G_DEFINE_ENUM_TYPE ( @EnumName@
+                   , @enum_name@
+/*** END value-header ***/
+/*** BEGIN value-production ***/
+                   , G_DEFINE_ENUM_VALUE (@VALUENAME@, "@valuenick@")
+/*** END value-production ***/
+/*** BEGIN value-tail ***/
+                   );
+/*** END value-tail ***/

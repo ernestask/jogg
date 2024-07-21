@@ -16,6 +16,9 @@ G_DECLARE_FINAL_TYPE (JoggApplication, jogg_application,
                       JOGG, APPLICATION,
                       GtkApplication);
 
+GPtrArray *jogg_application_app_info_search ( JoggApplication *self
+                                            , const char      *query);
+
 JoggApplication *jogg_application_new (void);
 
 G_END_DECLS

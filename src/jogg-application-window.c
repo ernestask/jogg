@@ -17,7 +17,7 @@ struct _JoggApplicationWindow
     GtkSingleSelection *model;
     GtkFilterListModel *filter_model;
     GListStore *applications;
-    GtkCustomFilter *filter;
+    GtkCustomSorter *custom_sorter;
     GtkWidget *revealer;
     GtkWidget *revealer_box;
     GtkWidget *search_entry;
@@ -108,42 +108,24 @@ jogg_application_window_search_entry_on_search_changed (GtkSearchEntry *self,
                                                         gpointer        user_data)
 {
     JoggApplicationWindow *window = NULL;
+    size_t n = 0;
+    GtkApplication *application = NULL;
     const char *text = NULL;
-    g_autofree GStrv *app_infos = NULL;
-    g_autoptr (GPtrArray) desktop_app_infos = NULL;
-    size_t n;
+    g_autoptr (GPtrArray) results = NULL;
 
     window = JOGG_APPLICATION_WINDOW (user_data);
-    text = gtk_editable_get_text (GTK_EDITABLE (self));
-    app_infos = g_desktop_app_info_search (text);
-    desktop_app_infos = g_ptr_array_new_full (64, g_object_unref);
     n = g_list_model_get_n_items (G_LIST_MODEL (window->applications));
+    application = gtk_window_get_application (GTK_WINDOW (window));
+    text = gtk_editable_get_text (GTK_EDITABLE (self));
+    results = jogg_application_app_info_search (JOGG_APPLICATION (application), text);
 
-    g_list_store_splice (window->applications, 0, n, NULL, 0);
+    g_list_store_splice (window->applications
+                        , 0
+                        , n
+                        , results->pdata
+                        , results->len
+                        );
 
-    for (size_t i = 0; app_infos[i] != NULL; i++)
-    {
-        for (size_t j = 0; app_infos[i][j] != NULL; j++)
-        {
-            GDesktopAppInfo *app_info = NULL;
-            JoggResult *result = NULL;
-
-            app_info = g_desktop_app_info_new (app_infos[i][j]);
-            if (app_info == NULL)
-            {
-                continue;
-            }
-            result = jogg_result_new (app_info);
-
-            g_ptr_array_add (desktop_app_infos, result);
-        }
-
-        g_strfreev (app_infos[i]);
-    }
-
-    g_list_store_splice (window->applications, 0, 0,
-                         desktop_app_infos->pdata,
-                         desktop_app_infos->len);
 }
 
 static void
@@ -203,15 +185,12 @@ jogg_application_window_results_on_activate ( GtkListView *self
     jogg_application_window_quit (user_data);
 }
 
-static gboolean
-jogg_application_window_app_info_filter_func ( gpointer item
-                                             , gpointer user_data)
+static gint
+jogg_application_window_result_sort_func ( gconstpointer a
+                                         , gconstpointer b
+                                         , gpointer      user_data)
 {
-    g_autoptr (GDesktopAppInfo) app_info = NULL;
-
-    app_info = jogg_result_get_app_info (item);
-
-    return !g_desktop_app_info_get_nodisplay (app_info);
+    return jogg_result_compare (a, b);
 }
 
 static gboolean
@@ -336,11 +315,11 @@ jogg_application_window_init (JoggApplicationWindow *self)
     gtk_search_entry_set_key_capture_widget ( GTK_SEARCH_ENTRY (self->search_entry)
                                             , self->results
                                             );
-    gtk_custom_filter_set_filter_func ( self->filter
-                                      , jogg_application_window_app_info_filter_func
-                                      , NULL
-                                      , NULL
-                                      );
+    gtk_custom_sorter_set_sort_func ( self->custom_sorter
+                                    , jogg_application_window_result_sort_func
+                                    , NULL
+                                    , NULL
+                                    );
 
     controller = gtk_event_controller_key_new ();
 
@@ -408,7 +387,7 @@ jogg_application_window_class_init (JoggApplicationWindowClass *klass)
                                           applications);
     gtk_widget_class_bind_template_child (widget_class,
                                           JoggApplicationWindow,
-                                          filter);
+                                          custom_sorter);
     gtk_widget_class_bind_template_child (widget_class,
                                           JoggApplicationWindow,
                                           revealer);

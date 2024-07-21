@@ -13,6 +13,7 @@ gio_unix = dependency('gio-unix-2.0')
 glib = dependency('glib-2.0',
   version: '>= 2.44'
 )
+gmodule_export = dependency('gmodule-export-2.0')
 gtk4 = dependency('gtk4',
   version: '>= 4.14.0',
 )
