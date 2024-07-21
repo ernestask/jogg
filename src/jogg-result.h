@@ -23,6 +23,7 @@ G_DECLARE_FINAL_TYPE ( JoggResult
                      , GObject
                      );
 
+char            *jogg_result_get_action      (JoggResult *self);
 GDesktopAppInfo *jogg_result_get_app_info    (JoggResult *self);
 bool             jogg_result_is_prefix_match (JoggResult *self);
 JoggMatchType    jogg_result_get_match_type  (JoggResult *self);

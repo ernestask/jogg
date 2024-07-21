@@ -176,12 +176,22 @@ jogg_application_window_results_on_activate ( GtkListView *self
     GtkSelectionModel *model = NULL;
     JoggResult *item = NULL;
     g_autoptr (GDesktopAppInfo) app_info = NULL;
+    g_autofree char *action = NULL;
 
     model = gtk_list_view_get_model (self);
     item = g_list_model_get_item (G_LIST_MODEL (model), position);
     app_info = jogg_result_get_app_info (JOGG_RESULT (item));
+    action = jogg_result_get_action (JOGG_RESULT (item));
 
-    g_app_info_launch (G_APP_INFO (app_info), NULL, NULL, NULL);
+    if (action != NULL)
+    {
+        g_desktop_app_info_launch_action (app_info, action, NULL);
+    }
+    else
+    {
+        g_app_info_launch (G_APP_INFO (app_info), NULL, NULL, NULL);
+    }
+
     jogg_application_window_quit (user_data);
 }
 

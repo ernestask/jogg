@@ -30,6 +30,22 @@ static GParamSpec *properties[N_PROPERTIES];
 
 G_DEFINE_TYPE (JoggResult, jogg_result, G_TYPE_OBJECT);
 
+char *
+jogg_result_get_action_name ( GObject    *object
+                            , JoggResult *self)
+{
+    if (NULL == self)
+    {
+        return NULL;
+    }
+    if (NULL == self->action)
+    {
+        return NULL;
+    }
+
+    return g_desktop_app_info_get_action_name (self->app_info, self->action);
+}
+
 GIcon *
 jogg_result_get_icon ( GObject    *object
                      , JoggResult *self)
@@ -227,6 +243,12 @@ jogg_result_class_init (JoggResultClass *klass)
                                       , G_N_ELEMENTS (properties)
                                       , properties
                                       );
+}
+
+char *
+jogg_result_get_action (JoggResult *self)
+{
+    return g_strdup (self->action);
 }
 
 GDesktopAppInfo *
