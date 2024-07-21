@@ -21,12 +21,46 @@
           </object>
         </child>
         <child>
-          <object class='GtkLabel'>
-            <binding name='label'>
-              <lookup name='label' type='JoggResult'>
-                <lookup name='item'>GtkListItem</lookup>
-              </lookup>
-            </binding>
+          <object class='GtkBox'>
+            <property name='orientation'>horizontal</property>
+            <property name='spacing'>6</property>
+            <child>
+              <object class='GtkLabel'>
+                <binding name='label'>
+                  <lookup name='label' type='JoggResult'>
+                    <lookup name='item'>GtkListItem</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class='GtkBox'>
+                <property name='orientation'>horizontal</property>
+                <property name='spacing'>6</property>
+                <binding name='visible'>
+                  <closure type='gboolean' function='jogg_result_is_action_visible'>
+                    <lookup name='item'>GtkListItem</lookup>
+                  </closure>
+                </binding>
+                <style>
+                  <class name='dim-label'/>
+                </style>
+                <child>
+                  <object class='GtkImage'>
+                    <property name='icon-name'>pan-end-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class='GtkLabel'>
+                    <binding name='label'>
+                      <lookup name='action' type='JoggResult'>
+                        <lookup name='item'>GtkListItem</lookup>
+                      </lookup>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
