@@ -297,13 +297,6 @@ jogg_application_window_init (JoggApplicationWindow *self)
                      , G_CALLBACK (jogg_application_window_search_entry_on_activate)
                      , self
                      );
-#if 0
-    g_signal_connect ( self->search_entry
-                     , "next-match"
-                     , G_CALLBACK (jogg_application_window_search_entry_on_next_match)
-                     , self
-                     );
-#endif
     g_signal_connect ( self->search_entry
                      , "search-changed"
                      , G_CALLBACK (jogg_application_window_search_entry_on_search_changed)
@@ -434,11 +427,6 @@ jogg_application_window_class_init (JoggApplicationWindowClass *klass)
                                          , JoggApplicationWindow
                                          , results
                                          );
-
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             jogg_application_window_search_entry_on_search_changed);
-    gtk_widget_class_bind_template_callback (widget_class,
-                                             jogg_application_window_search_entry_on_stop_search);
 }
 
 JoggApplicationWindow *
