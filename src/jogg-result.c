@@ -30,46 +30,6 @@ static GParamSpec *properties[N_PROPERTIES];
 
 G_DEFINE_TYPE (JoggResult, jogg_result, G_TYPE_OBJECT);
 
-char *
-jogg_result_get_action_name ( GObject    *object
-                            , JoggResult *self)
-{
-    if (NULL == self)
-    {
-        return NULL;
-    }
-    if (NULL == self->action)
-    {
-        return NULL;
-    }
-
-    return g_desktop_app_info_get_action_name (self->app_info, self->action);
-}
-
-GIcon *
-jogg_result_get_icon ( GObject    *object
-                     , JoggResult *self)
-{
-    GIcon *icon = NULL;
-
-    if (NULL == self)
-    {
-        return NULL;
-    }
-
-    icon = g_app_info_get_icon (G_APP_INFO (self->app_info));
-    if (NULL == icon)
-    {
-        icon = g_icon_new_for_string ("application-x-executable", NULL);
-    }
-    else
-    {
-        icon = g_object_ref (icon);
-    }
-
-    return icon;
-}
-
 gboolean
 jogg_result_is_action_visible ( GObject    *object
                               , JoggResult *self)

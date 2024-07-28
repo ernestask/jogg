@@ -22,6 +22,8 @@ jogg_sources = [
   'jogg-enums.h',
   'jogg-result.c',
   'jogg-result.h',
+  'jogg-result-widget.c',
+  'jogg-result-widget.h',
   'jogg-types.h',
   'jogg-utils.c',
   'jogg-utils.h',

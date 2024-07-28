@@ -1,47 +1,36 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <interface>
   <requires lib='gtk' version='4.0'/>
-  <template class='GtkListItem'>
-    <property name='child'>
-      <object class='GtkBox'>
-        <property name='margin-bottom'>6</property>
-        <property name='margin-end'>6</property>
-        <property name='margin-start'>6</property>
-        <property name='margin-top'>6</property>
-        <property name='orientation'>horizontal</property>
-        <property name='spacing'>12</property>
-        <child>
-          <object class='GtkImage'>
-            <binding name='gicon'>
-              <closure type='GIcon' function='jogg_result_get_icon'>
-                <lookup name='item'>GtkListItem</lookup>
-              </closure>
-            </binding>
-            <property name='icon-size'>large</property>
-          </object>
-        </child>
+  <template class='JoggResultWidget' parent='GtkBox'>
+    <property name='margin-bottom'>6</property>
+    <property name='margin-end'>6</property>
+    <property name='margin-start'>6</property>
+    <property name='margin-top'>6</property>
+    <property name='orientation'>horizontal</property>
+    <property name='spacing'>12</property>
+    <child>
+      <object class='GtkImage' id='icon'>
+        <property name='icon-size'>large</property>
+      </object>
+    </child>
+    <child>
+      <object class='GtkBox' id='name_description_box'>
+        <property name='orientation'>vertical</property>
+        <property name='spacing'>6</property>
+        <property name='valign'>center</property>
         <child>
           <object class='GtkBox'>
+            <property name='halign'>start</property>
             <property name='orientation'>horizontal</property>
             <property name='spacing'>6</property>
             <child>
-              <object class='GtkLabel'>
-                <binding name='label'>
-                  <lookup name='label' type='JoggResult'>
-                    <lookup name='item'>GtkListItem</lookup>
-                  </lookup>
-                </binding>
-              </object>
+              <object class='GtkLabel' id='name'/>
             </child>
             <child>
-              <object class='GtkBox'>
+              <object class='GtkBox' id='action_box'>
                 <property name='orientation'>horizontal</property>
                 <property name='spacing'>6</property>
-                <binding name='visible'>
-                  <closure type='gboolean' function='jogg_result_is_action_visible'>
-                    <lookup name='item'>GtkListItem</lookup>
-                  </closure>
-                </binding>
+                <property name='visible'>false</property>
                 <style>
                   <class name='dim-label'/>
                 </style>
@@ -51,20 +40,25 @@
                   </object>
                 </child>
                 <child>
-                  <object class='GtkLabel'>
-                    <binding name='label'>
-                      <closure type='gchararray' function='jogg_result_get_action_name'>
-                        <lookup name='item'>GtkListItem</lookup>
-                      </closure>
-                    </binding>
-                  </object>
+                  <object class='GtkLabel' id='action'/>
                 </child>
               </object>
             </child>
           </object>
         </child>
+        <child>
+          <object class='GtkLabel' id='description'>
+            <attributes>
+              <attribute name='style' value='italic'/>
+            </attributes>
+            <property name='halign'>start</property>
+            <style>
+              <class name='caption'/>
+              <class name='dim-label'/>
+            </style>
+          </object>
+        </child>
       </object>
-    </property>
-    <property name='focusable'>false</property>
+    </child>
   </template>
 </interface>

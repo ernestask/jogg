@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <interface>
   <requires lib='gtk' version='4.0'/>
+  <object class='GtkSizeGroup' id='size_group'>
+    <property name='mode'>vertical</property>
+  </object>
   <template class='JoggApplicationWindow' parent='GtkApplicationWindow'>
     <property name='focus-widget'>search_entry</property>
     <property name='resizable'>false</property>
@@ -36,8 +39,7 @@
                       <child>
                         <object class='GtkListView' id='results'>
                           <property name='factory'>
-                            <object class='GtkBuilderListItemFactory'>
-                              <property name='resource'>/baltic/engineering/jogg/ui/result.ui</property>
+                            <object class='GtkSignalListItemFactory' id='list_item_factory'>
                             </object>
                           </property>
                           <property name='focusable'>false</property>
