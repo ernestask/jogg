@@ -7,6 +7,7 @@
 #include "jogg-application.h"
 #include "jogg-application-window.h"
 #include "jogg-result.h"
+#include "jogg-result-widget.h"
 
 #include <gio/gdesktopappinfo.h>
 
@@ -14,6 +15,7 @@ struct _JoggApplicationWindow
 {
     GtkApplicationWindow parent_instance;
 
+    GtkSizeGroup *size_group;
     GtkSingleSelection *model;
     GtkFilterListModel *filter_model;
     GListStore *applications;
@@ -24,6 +26,7 @@ struct _JoggApplicationWindow
     GtkWidget *results_revealer;
     GtkWidget *results_scrolled_window;
     GtkWidget *results;
+    GtkWidget *list_item_factory;
 };
 
 G_DEFINE_TYPE ( JoggApplicationWindow
@@ -275,6 +278,40 @@ jogg_application_window_search_entry_on_key_pressed ( GtkEventControllerKey *sel
 }
 
 static void
+jogg_application_window_list_item_factory_on_setup ( GtkSignalListItemFactory *
+                                                   , GObject                  *object
+                                                   , gpointer                  user_data
+                                                   )
+{
+    JoggApplicationWindow *self = NULL;
+    GtkWidget *widget = NULL;
+
+    self = user_data;
+    widget = jogg_result_widget_new ();
+
+    gtk_list_item_set_child (GTK_LIST_ITEM (object), widget);
+    gtk_list_item_set_focusable (GTK_LIST_ITEM (object), FALSE);
+    gtk_size_group_add_widget (self->size_group, widget);
+}
+
+static void
+jogg_application_window_list_item_factory_on_bind ( GtkSignalListItemFactory *
+                                                  , GObject                  *object
+                                                  , gpointer                  user_data
+                                                  )
+{
+    GtkWidget *widget = NULL;
+    GObject *item = NULL;
+
+    widget = gtk_list_item_get_child (GTK_LIST_ITEM (object));
+    item = gtk_list_item_get_item (GTK_LIST_ITEM (object));
+
+    jogg_result_widget_set_result ( JOGG_RESULT_WIDGET (widget)
+                                  , JOGG_RESULT (item)
+                                  );
+}
+
+static void
 jogg_application_window_init (JoggApplicationWindow *self)
 {
     GtkEventController *controller = NULL;
@@ -320,6 +357,16 @@ jogg_application_window_init (JoggApplicationWindow *self)
     g_signal_connect ( self->results
                      , "activate"
                      , G_CALLBACK (jogg_application_window_results_on_activate)
+                     , self
+                     );
+    g_signal_connect ( self->list_item_factory
+                     , "setup"
+                     , G_CALLBACK (jogg_application_window_list_item_factory_on_setup)
+                     , self
+                     );
+    g_signal_connect ( self->list_item_factory
+                     , "bind"
+                     , G_CALLBACK (jogg_application_window_list_item_factory_on_bind)
                      , self
                      );
 
@@ -389,6 +436,10 @@ jogg_application_window_class_init (JoggApplicationWindowClass *klass)
 
     gtk_widget_class_bind_template_child ( widget_class
                                          , JoggApplicationWindow
+                                         , size_group
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
                                          , model
                                          );
     gtk_widget_class_bind_template_child ( widget_class
@@ -426,6 +477,10 @@ jogg_application_window_class_init (JoggApplicationWindowClass *klass)
     gtk_widget_class_bind_template_child ( widget_class
                                          , JoggApplicationWindow
                                          , results
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , list_item_factory
                                          );
 }
 
