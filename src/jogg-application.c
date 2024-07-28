@@ -194,8 +194,8 @@ match_found:
 JoggApplication *
 jogg_application_new (void)
 {
-      return g_object_new (JOGG_TYPE_APPLICATION,
-                           "application-id", "engineering.baltic.jogg",
-                           "flags", G_APPLICATION_DEFAULT_FLAGS,
-                           NULL);
+      return g_object_new ( JOGG_TYPE_APPLICATION
+                          , "application-id", "engineering.baltic.jogg"
+                          , "flags", G_APPLICATION_DEFAULT_FLAGS
+                          , NULL);
 }

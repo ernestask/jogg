@@ -32,10 +32,11 @@ G_DEFINE_TYPE ( JoggApplicationWindow
               );
 
 static gboolean
-jogg_application_window_transform_n_items (GBinding     *binding,
-                                           const GValue *from_value,
-                                           GValue       *to_value,
-                                           gpointer      user_data)
+jogg_application_window_transform_n_items ( GBinding     *binding
+                                          , const GValue *from_value
+                                          , GValue       *to_value
+                                          , gpointer      user_data
+                                          )
 {
     guint n_items;
 
@@ -47,9 +48,10 @@ jogg_application_window_transform_n_items (GBinding     *binding,
 }
 
 static void
-jogg_application_window_results_revealer_on_notify_reveal_child (GObject    *self,
-                                                                   GParamSpec *pspec,
-                                                                   gpointer    user_data)
+jogg_application_window_results_revealer_on_notify_reveal_child ( GObject    *self
+                                                                , GParamSpec *pspec
+                                                                , gpointer    user_data
+                                                                )
 {
     JoggApplicationWindow *window;
 
@@ -62,9 +64,10 @@ jogg_application_window_results_revealer_on_notify_reveal_child (GObject    *sel
 }
 
 static void
-jogg_application_window_results_revealer_on_notify_child_revealed (GObject    *self,
-                                                                   GParamSpec *pspec,
-                                                                   gpointer    user_data)
+jogg_application_window_results_revealer_on_notify_child_revealed ( GObject    *self
+                                                                  , GParamSpec *pspec
+                                                                  , gpointer    user_data
+                                                                  )
 {
     JoggApplicationWindow *window;
 
@@ -104,8 +107,9 @@ jogg_application_window_search_entry_on_activate ( GtkSearchEntry *self
 }
 
 static void
-jogg_application_window_search_entry_on_search_changed (GtkSearchEntry *self,
-                                                        gpointer        user_data)
+jogg_application_window_search_entry_on_search_changed ( GtkSearchEntry *self
+                                                       , gpointer        user_data
+                                                       )
 {
     JoggApplicationWindow *window = NULL;
     size_t n = 0;
@@ -129,9 +133,10 @@ jogg_application_window_search_entry_on_search_changed (GtkSearchEntry *self,
 }
 
 static void
-jogg_application_window_revealer_on_child_revealed (GObject    *self,
-                                                    GParamSpec *pspec,
-                                                    gpointer    user_data)
+jogg_application_window_revealer_on_child_revealed ( GObject    *self
+                                                   , GParamSpec *pspec
+                                                   , gpointer    user_data
+                                                   )
 {
     (void) pspec;
 
@@ -163,7 +168,8 @@ jogg_application_window_quit (JoggApplicationWindow *self)
 
 static void
 jogg_application_window_search_entry_on_stop_search ( GtkSearchEntry *self
-                                                    , gpointer        user_data)
+                                                    , gpointer        user_data
+                                                    )
 {
     jogg_application_window_quit (JOGG_APPLICATION_WINDOW (user_data));
 }
@@ -171,7 +177,8 @@ jogg_application_window_search_entry_on_stop_search ( GtkSearchEntry *self
 static void
 jogg_application_window_results_on_activate ( GtkListView *self
                                             , guint        position
-                                            , gpointer     user_data)
+                                            , gpointer     user_data
+                                            )
 {
     GtkSelectionModel *model = NULL;
     JoggResult *item = NULL;
@@ -198,7 +205,8 @@ jogg_application_window_results_on_activate ( GtkListView *self
 static gint
 jogg_application_window_result_sort_func ( gconstpointer a
                                          , gconstpointer b
-                                         , gpointer      user_data)
+                                         , gpointer      user_data
+                                         )
 {
     return jogg_result_compare (a, b);
 }
@@ -355,9 +363,10 @@ jogg_application_window_map (GtkWidget *self)
 }
 
 static gboolean
-jogg_application_window_on_escape_pressed (GtkWidget *widget,
-                                           GVariant  *args,
-                                           gpointer   user_data)
+jogg_application_window_on_escape_pressed ( GtkWidget *widget
+                                          , GVariant  *args
+                                          , gpointer   user_data
+                                          )
 {
     jogg_application_window_quit (JOGG_APPLICATION_WINDOW (widget));
 
@@ -389,33 +398,42 @@ jogg_application_window_class_init (JoggApplicationWindowClass *klass)
                                          , JoggApplicationWindow
                                          , model
                                          );
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          filter_model);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          applications);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          custom_sorter);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          revealer);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          revealer_box);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          search_entry);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          results_revealer);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          results_scrolled_window);
-    gtk_widget_class_bind_template_child (widget_class,
-                                          JoggApplicationWindow,
-                                          results);
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , filter_model
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , applications
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , custom_sorter
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , revealer
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , revealer_box
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , search_entry
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , results_revealer
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , results_scrolled_window
+                                         );
+    gtk_widget_class_bind_template_child ( widget_class
+                                         , JoggApplicationWindow
+                                         , results
+                                         );
 
     gtk_widget_class_bind_template_callback (widget_class,
                                              jogg_application_window_search_entry_on_search_changed);
@@ -426,7 +444,8 @@ jogg_application_window_class_init (JoggApplicationWindowClass *klass)
 JoggApplicationWindow *
 jogg_application_window_new (JoggApplication *app)
 {
-      return g_object_new (JOGG_TYPE_APPLICATION_WINDOW,
-                           "application", app,
-                           NULL);
+      return g_object_new ( JOGG_TYPE_APPLICATION_WINDOW
+                          , "application" , app
+                          , NULL
+                          );
 }
